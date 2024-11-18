@@ -1,0 +1,577 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="UNIVERSIDADModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alquileres">
+          <Key>
+            <PropertyRef Name="AlquilerID" />
+          </Key>
+          <Property Name="AlquilerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
+          <Property Name="CanchaID" Type="int" Nullable="false" />
+          <Property Name="FechaAlquiler" Type="datetime" Nullable="false" />
+          <Property Name="DuracionHoras" Type="int" Nullable="false" />
+          <Property Name="MontoTotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Estado" Type="nvarchar" MaxLength="50" />
+          <Property Name="CodigoAlquiler" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Alumno">
+          <Key>
+            <PropertyRef Name="AlumnoID" />
+          </Key>
+          <Property Name="AlumnoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodigoAlumno" Type="nvarchar" MaxLength="100" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" />
+          <Property Name="Apellido" Type="nvarchar" MaxLength="100" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Canchas">
+          <Key>
+            <PropertyRef Name="CanchaID" />
+          </Key>
+          <Property Name="CanchaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProveedorID" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" />
+          <Property Name="Deporte" Type="nvarchar" MaxLength="50" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="255" />
+          <Property Name="PrecioPorHora" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Disponible" Type="bit" />
+        </EntityType>
+        <EntityType Name="HorariosCancha">
+          <Key>
+            <PropertyRef Name="HorarioID" />
+          </Key>
+          <Property Name="HorarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CanchaID" Type="int" Nullable="false" />
+          <Property Name="DiaSemana" Type="nvarchar" MaxLength="10" />
+          <Property Name="HoraInicio" Type="time" Precision="7" Nullable="false" />
+          <Property Name="HoraFin" Type="time" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="PagoID" />
+          </Key>
+          <Property Name="PagoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlquilerID" Type="int" Nullable="false" />
+          <Property Name="Monto" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="TipoPago" Type="nvarchar" MaxLength="50" />
+          <Property Name="Estado" Type="nvarchar" MaxLength="50" />
+          <Property Name="FechaPago" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Proveedores">
+          <Key>
+            <PropertyRef Name="ProveedorID" />
+          </Key>
+          <Property Name="ProveedorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
+          <Property Name="Empresa" Type="nvarchar" MaxLength="100" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="15" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="255" />
+          <Property Name="FechaRegistro" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ReservaCancha">
+          <Key>
+            <PropertyRef Name="ReservaID" />
+          </Key>
+          <Property Name="ReservaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlumnoID" Type="int" />
+          <Property Name="FechaReserva" Type="date" />
+          <Property Name="HoraInicio" Type="time" Precision="7" />
+          <Property Name="HoraFin" Type="time" Precision="7" />
+          <Property Name="Cancha" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="UsuarioID" />
+          </Key>
+          <Property Name="UsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Apellido" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Contraseña" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Perfil" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FechaRegistro" Type="datetime" />
+        </EntityType>
+        <Association Name="FK__Alquilere__Canch__440B1D61">
+          <End Role="Canchas" Type="Self.Canchas" Multiplicity="1" />
+          <End Role="Alquileres" Type="Self.Alquileres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canchas">
+              <PropertyRef Name="CanchaID" />
+            </Principal>
+            <Dependent Role="Alquileres">
+              <PropertyRef Name="CanchaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Alquilere__Usuar__4316F928">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Alquileres" Type="Self.Alquileres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="Alquileres">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canchas__Proveed__3E52440B">
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="1" />
+          <End Role="Canchas" Type="Self.Canchas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="ProveedorID" />
+            </Principal>
+            <Dependent Role="Canchas">
+              <PropertyRef Name="ProveedorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__HorariosC__Canch__4CA06362">
+          <End Role="Canchas" Type="Self.Canchas" Multiplicity="1" />
+          <End Role="HorariosCancha" Type="Self.HorariosCancha" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canchas">
+              <PropertyRef Name="CanchaID" />
+            </Principal>
+            <Dependent Role="HorariosCancha">
+              <PropertyRef Name="CanchaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pagos__AlquilerI__47DBAE45">
+          <End Role="Alquileres" Type="Self.Alquileres" Multiplicity="1" />
+          <End Role="Pagos" Type="Self.Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alquileres">
+              <PropertyRef Name="AlquilerID" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="AlquilerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Proveedor__Usuar__3A81B327">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Proveedores" Type="Self.Proveedores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="Proveedores">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Alumno_Reserva">
+          <End Role="Alumno" Type="Self.Alumno" Multiplicity="0..1" />
+          <End Role="ReservaCancha" Type="Self.ReservaCancha" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="AlumnoID" />
+            </Principal>
+            <Dependent Role="ReservaCancha">
+              <PropertyRef Name="AlumnoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="UNIVERSIDADModelStoreContainer">
+          <EntitySet Name="Alquileres" EntityType="Self.Alquileres" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Alumno" EntityType="Self.Alumno" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Canchas" EntityType="Self.Canchas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HorariosCancha" EntityType="Self.HorariosCancha" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pagos" EntityType="Self.Pagos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Proveedores" EntityType="Self.Proveedores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReservaCancha" EntityType="Self.ReservaCancha" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Alquilere__Canch__440B1D61" Association="Self.FK__Alquilere__Canch__440B1D61">
+            <End Role="Canchas" EntitySet="Canchas" />
+            <End Role="Alquileres" EntitySet="Alquileres" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Alquilere__Usuar__4316F928" Association="Self.FK__Alquilere__Usuar__4316F928">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Alquileres" EntitySet="Alquileres" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canchas__Proveed__3E52440B" Association="Self.FK__Canchas__Proveed__3E52440B">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="Canchas" EntitySet="Canchas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HorariosC__Canch__4CA06362" Association="Self.FK__HorariosC__Canch__4CA06362">
+            <End Role="Canchas" EntitySet="Canchas" />
+            <End Role="HorariosCancha" EntitySet="HorariosCancha" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pagos__AlquilerI__47DBAE45" Association="Self.FK__Pagos__AlquilerI__47DBAE45">
+            <End Role="Alquileres" EntitySet="Alquileres" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Proveedor__Usuar__3A81B327" Association="Self.FK__Proveedor__Usuar__3A81B327">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Proveedores" EntitySet="Proveedores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Alumno_Reserva" Association="Self.FK_Alumno_Reserva">
+            <End Role="Alumno" EntitySet="Alumno" />
+            <End Role="ReservaCancha" EntitySet="ReservaCancha" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="UNIVERSIDADModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Alumno">
+          <Key>
+            <PropertyRef Name="AlumnoID" />
+          </Key>
+          <Property Name="AlumnoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodigoAlumno" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ReservaCancha" Relationship="Self.FK_Alumno_Reserva" FromRole="Alumno" ToRole="ReservaCancha" />
+        </EntityType>
+        <EntityType Name="ReservaCancha">
+          <Key>
+            <PropertyRef Name="ReservaID" />
+          </Key>
+          <Property Name="ReservaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlumnoID" Type="Int32" />
+          <Property Name="FechaReserva" Type="DateTime" Precision="0" />
+          <Property Name="HoraInicio" Type="Time" Precision="7" />
+          <Property Name="HoraFin" Type="Time" Precision="7" />
+          <Property Name="Cancha" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Alumno" Relationship="Self.FK_Alumno_Reserva" FromRole="ReservaCancha" ToRole="Alumno" />
+        </EntityType>
+        <Association Name="FK_Alumno_Reserva">
+          <End Role="Alumno" Type="Self.Alumno" Multiplicity="0..1" />
+          <End Role="ReservaCancha" Type="Self.ReservaCancha" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="AlumnoID" />
+            </Principal>
+            <Dependent Role="ReservaCancha">
+              <PropertyRef Name="AlumnoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="UNIVERSIDADEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Alumno" EntityType="Self.Alumno" />
+          <EntitySet Name="ReservaCancha" EntityType="Self.ReservaCancha" />
+          <AssociationSet Name="FK_Alumno_Reserva" Association="Self.FK_Alumno_Reserva">
+            <End Role="Alumno" EntitySet="Alumno" />
+            <End Role="ReservaCancha" EntitySet="ReservaCancha" />
+          </AssociationSet>
+          <EntitySet Name="Alquileres" EntityType="UNIVERSIDADModel.Alquileres" />
+          <EntitySet Name="Canchas" EntityType="UNIVERSIDADModel.Canchas" />
+          <EntitySet Name="HorariosCancha" EntityType="UNIVERSIDADModel.HorariosCancha" />
+          <EntitySet Name="Pagos" EntityType="UNIVERSIDADModel.Pagos" />
+          <EntitySet Name="Proveedores" EntityType="UNIVERSIDADModel.Proveedores" />
+          <EntitySet Name="Usuarios" EntityType="UNIVERSIDADModel.Usuarios" />
+          <AssociationSet Name="FK__Alquilere__Canch__440B1D61" Association="UNIVERSIDADModel.FK__Alquilere__Canch__440B1D61">
+            <End Role="Canchas" EntitySet="Canchas" />
+            <End Role="Alquileres" EntitySet="Alquileres" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Alquilere__Usuar__4316F928" Association="UNIVERSIDADModel.FK__Alquilere__Usuar__4316F928">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Alquileres" EntitySet="Alquileres" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Pagos__AlquilerI__47DBAE45" Association="UNIVERSIDADModel.FK__Pagos__AlquilerI__47DBAE45">
+            <End Role="Alquileres" EntitySet="Alquileres" />
+            <End Role="Pagos" EntitySet="Pagos" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canchas__Proveed__3E52440B" Association="UNIVERSIDADModel.FK__Canchas__Proveed__3E52440B">
+            <End Role="Proveedores" EntitySet="Proveedores" />
+            <End Role="Canchas" EntitySet="Canchas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__HorariosC__Canch__4CA06362" Association="UNIVERSIDADModel.FK__HorariosC__Canch__4CA06362">
+            <End Role="Canchas" EntitySet="Canchas" />
+            <End Role="HorariosCancha" EntitySet="HorariosCancha" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Proveedor__Usuar__3A81B327" Association="UNIVERSIDADModel.FK__Proveedor__Usuar__3A81B327">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Proveedores" EntitySet="Proveedores" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Alquileres">
+          <Key>
+            <PropertyRef Name="AlquilerID" />
+          </Key>
+          <Property Name="AlquilerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="CanchaID" Type="Int32" Nullable="false" />
+          <Property Name="FechaAlquiler" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DuracionHoras" Type="Int32" Nullable="false" />
+          <Property Name="MontoTotal" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodigoAlquiler" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Canchas" Relationship="UNIVERSIDADModel.FK__Alquilere__Canch__440B1D61" FromRole="Alquileres" ToRole="Canchas" />
+          <NavigationProperty Name="Usuarios" Relationship="UNIVERSIDADModel.FK__Alquilere__Usuar__4316F928" FromRole="Alquileres" ToRole="Usuarios" />
+          <NavigationProperty Name="Pagos" Relationship="UNIVERSIDADModel.FK__Pagos__AlquilerI__47DBAE45" FromRole="Alquileres" ToRole="Pagos" />
+        </EntityType>
+        <EntityType Name="Canchas">
+          <Key>
+            <PropertyRef Name="CanchaID" />
+          </Key>
+          <Property Name="CanchaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProveedorID" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Deporte" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Direccion" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PrecioPorHora" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Disponible" Type="Boolean" />
+          <NavigationProperty Name="Alquileres" Relationship="UNIVERSIDADModel.FK__Alquilere__Canch__440B1D61" FromRole="Canchas" ToRole="Alquileres" />
+          <NavigationProperty Name="Proveedores" Relationship="UNIVERSIDADModel.FK__Canchas__Proveed__3E52440B" FromRole="Canchas" ToRole="Proveedores" />
+          <NavigationProperty Name="HorariosCancha" Relationship="UNIVERSIDADModel.FK__HorariosC__Canch__4CA06362" FromRole="Canchas" ToRole="HorariosCancha" />
+        </EntityType>
+        <EntityType Name="HorariosCancha">
+          <Key>
+            <PropertyRef Name="HorarioID" />
+          </Key>
+          <Property Name="HorarioID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CanchaID" Type="Int32" Nullable="false" />
+          <Property Name="DiaSemana" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="HoraInicio" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="HoraFin" Type="Time" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Canchas" Relationship="UNIVERSIDADModel.FK__HorariosC__Canch__4CA06362" FromRole="HorariosCancha" ToRole="Canchas" />
+        </EntityType>
+        <EntityType Name="Pagos">
+          <Key>
+            <PropertyRef Name="PagoID" />
+          </Key>
+          <Property Name="PagoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlquilerID" Type="Int32" Nullable="false" />
+          <Property Name="Monto" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="TipoPago" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FechaPago" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Alquileres" Relationship="UNIVERSIDADModel.FK__Pagos__AlquilerI__47DBAE45" FromRole="Pagos" ToRole="Alquileres" />
+        </EntityType>
+        <EntityType Name="Proveedores">
+          <Key>
+            <PropertyRef Name="ProveedorID" />
+          </Key>
+          <Property Name="ProveedorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="Empresa" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Direccion" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FechaRegistro" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Canchas" Relationship="UNIVERSIDADModel.FK__Canchas__Proveed__3E52440B" FromRole="Proveedores" ToRole="Canchas" />
+          <NavigationProperty Name="Usuarios" Relationship="UNIVERSIDADModel.FK__Proveedor__Usuar__3A81B327" FromRole="Proveedores" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="UsuarioID" />
+          </Key>
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Apellido" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Contraseña" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Perfil" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FechaRegistro" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Alquileres" Relationship="UNIVERSIDADModel.FK__Alquilere__Usuar__4316F928" FromRole="Usuarios" ToRole="Alquileres" />
+          <NavigationProperty Name="Proveedores" Relationship="UNIVERSIDADModel.FK__Proveedor__Usuar__3A81B327" FromRole="Usuarios" ToRole="Proveedores" />
+        </EntityType>
+        <Association Name="FK__Alquilere__Canch__440B1D61">
+          <End Type="UNIVERSIDADModel.Canchas" Role="Canchas" Multiplicity="1" />
+          <End Type="UNIVERSIDADModel.Alquileres" Role="Alquileres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canchas">
+              <PropertyRef Name="CanchaID" />
+            </Principal>
+            <Dependent Role="Alquileres">
+              <PropertyRef Name="CanchaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Alquilere__Usuar__4316F928">
+          <End Type="UNIVERSIDADModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="UNIVERSIDADModel.Alquileres" Role="Alquileres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="Alquileres">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Pagos__AlquilerI__47DBAE45">
+          <End Type="UNIVERSIDADModel.Alquileres" Role="Alquileres" Multiplicity="1" />
+          <End Type="UNIVERSIDADModel.Pagos" Role="Pagos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alquileres">
+              <PropertyRef Name="AlquilerID" />
+            </Principal>
+            <Dependent Role="Pagos">
+              <PropertyRef Name="AlquilerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canchas__Proveed__3E52440B">
+          <End Type="UNIVERSIDADModel.Proveedores" Role="Proveedores" Multiplicity="1" />
+          <End Type="UNIVERSIDADModel.Canchas" Role="Canchas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Proveedores">
+              <PropertyRef Name="ProveedorID" />
+            </Principal>
+            <Dependent Role="Canchas">
+              <PropertyRef Name="ProveedorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__HorariosC__Canch__4CA06362">
+          <End Type="UNIVERSIDADModel.Canchas" Role="Canchas" Multiplicity="1" />
+          <End Type="UNIVERSIDADModel.HorariosCancha" Role="HorariosCancha" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canchas">
+              <PropertyRef Name="CanchaID" />
+            </Principal>
+            <Dependent Role="HorariosCancha">
+              <PropertyRef Name="CanchaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Proveedor__Usuar__3A81B327">
+          <End Type="UNIVERSIDADModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="UNIVERSIDADModel.Proveedores" Role="Proveedores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="Proveedores">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="UNIVERSIDADModelStoreContainer" CdmEntityContainer="UNIVERSIDADEntities1">
+          <EntitySetMapping Name="Alumno">
+            <EntityTypeMapping TypeName="UNIVERSIDADModel.Alumno">
+              <MappingFragment StoreEntitySet="Alumno">
+                <ScalarProperty Name="AlumnoID" ColumnName="AlumnoID" />
+                <ScalarProperty Name="CodigoAlumno" ColumnName="CodigoAlumno" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReservaCancha">
+            <EntityTypeMapping TypeName="UNIVERSIDADModel.ReservaCancha">
+              <MappingFragment StoreEntitySet="ReservaCancha">
+                <ScalarProperty Name="ReservaID" ColumnName="ReservaID" />
+                <ScalarProperty Name="AlumnoID" ColumnName="AlumnoID" />
+                <ScalarProperty Name="FechaReserva" ColumnName="FechaReserva" />
+                <ScalarProperty Name="HoraInicio" ColumnName="HoraInicio" />
+                <ScalarProperty Name="HoraFin" ColumnName="HoraFin" />
+                <ScalarProperty Name="Cancha" ColumnName="Cancha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Alquileres">
+            <EntityTypeMapping TypeName="UNIVERSIDADModel.Alquileres">
+              <MappingFragment StoreEntitySet="Alquileres">
+                <ScalarProperty Name="CodigoAlquiler" ColumnName="CodigoAlquiler" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="MontoTotal" ColumnName="MontoTotal" />
+                <ScalarProperty Name="DuracionHoras" ColumnName="DuracionHoras" />
+                <ScalarProperty Name="FechaAlquiler" ColumnName="FechaAlquiler" />
+                <ScalarProperty Name="CanchaID" ColumnName="CanchaID" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="AlquilerID" ColumnName="AlquilerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Canchas">
+            <EntityTypeMapping TypeName="UNIVERSIDADModel.Canchas">
+              <MappingFragment StoreEntitySet="Canchas">
+                <ScalarProperty Name="Disponible" ColumnName="Disponible" />
+                <ScalarProperty Name="PrecioPorHora" ColumnName="PrecioPorHora" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Deporte" ColumnName="Deporte" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ProveedorID" ColumnName="ProveedorID" />
+                <ScalarProperty Name="CanchaID" ColumnName="CanchaID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HorariosCancha">
+            <EntityTypeMapping TypeName="UNIVERSIDADModel.HorariosCancha">
+              <MappingFragment StoreEntitySet="HorariosCancha">
+                <ScalarProperty Name="HoraFin" ColumnName="HoraFin" />
+                <ScalarProperty Name="HoraInicio" ColumnName="HoraInicio" />
+                <ScalarProperty Name="DiaSemana" ColumnName="DiaSemana" />
+                <ScalarProperty Name="CanchaID" ColumnName="CanchaID" />
+                <ScalarProperty Name="HorarioID" ColumnName="HorarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pagos">
+            <EntityTypeMapping TypeName="UNIVERSIDADModel.Pagos">
+              <MappingFragment StoreEntitySet="Pagos">
+                <ScalarProperty Name="FechaPago" ColumnName="FechaPago" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="TipoPago" ColumnName="TipoPago" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="AlquilerID" ColumnName="AlquilerID" />
+                <ScalarProperty Name="PagoID" ColumnName="PagoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Proveedores">
+            <EntityTypeMapping TypeName="UNIVERSIDADModel.Proveedores">
+              <MappingFragment StoreEntitySet="Proveedores">
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Empresa" ColumnName="Empresa" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="ProveedorID" ColumnName="ProveedorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="UNIVERSIDADModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Perfil" ColumnName="Perfil" />
+                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

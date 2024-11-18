@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7de1b626e55e40dea2c15eb8a8bfe640" Name="Diagram1">
+        <EntityTypeShape EntityType="UNIVERSIDADModel.Alumno" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="UNIVERSIDADModel.ReservaCancha" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="UNIVERSIDADModel.FK_Alumno_Reserva" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="UNIVERSIDADModel.Alquileres" Width="1.5" PointX="10.5" PointY="7" />
+        <EntityTypeShape EntityType="UNIVERSIDADModel.Canchas" Width="1.5" PointX="5.25" PointY="7.125" />
+        <EntityTypeShape EntityType="UNIVERSIDADModel.HorariosCancha" Width="1.5" PointX="7.5" PointY="7.5" />
+        <EntityTypeShape EntityType="UNIVERSIDADModel.Pagos" Width="1.5" PointX="12.75" PointY="7.375" />
+        <EntityTypeShape EntityType="UNIVERSIDADModel.Proveedores" Width="1.5" PointX="3" PointY="7.25" />
+        <EntityTypeShape EntityType="UNIVERSIDADModel.Usuarios" Width="1.5" PointX="0.75" PointY="7.25" />
+        <AssociationConnector Association="UNIVERSIDADModel.FK__Alquilere__Canch__440B1D61" />
+        <AssociationConnector Association="UNIVERSIDADModel.FK__Alquilere__Usuar__4316F928" />
+        <AssociationConnector Association="UNIVERSIDADModel.FK__Pagos__AlquilerI__47DBAE45" />
+        <AssociationConnector Association="UNIVERSIDADModel.FK__Canchas__Proveed__3E52440B" />
+        <AssociationConnector Association="UNIVERSIDADModel.FK__HorariosC__Canch__4CA06362" />
+        <AssociationConnector Association="UNIVERSIDADModel.FK__Proveedor__Usuar__3A81B327" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

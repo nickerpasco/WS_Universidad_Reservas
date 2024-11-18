@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Canchas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Gestión de Canchas</h1>
+
+        <!-- Formulario para registrar cancha -->
+        <div class="card mb-4">
+            <div class="card-header">Registrar Cancha</div>
+            <div class="card-body">
+                <form id="canchaForm">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre de la Cancha</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Nombre de la cancha">
+                    </div>
+                    <div class="mb-3">
+                        <label for="deporte" class="form-label">Deporte</label>
+                        <input type="text" class="form-control" id="deporte" placeholder="Deporte">
+                    </div>
+                    <div class="mb-3">
+                        <label for="proveedorID" class="form-label">Proveedor ID</label>
+                        <input type="number" class="form-control" id="proveedorID" placeholder="ID del proveedor">
+                    </div>
+                    <div class="mb-3">
+                        <label for="precioPorHora" class="form-label">Precio por Hora</label>
+                        <input type="number" class="form-control" id="precioPorHora" placeholder="Precio por hora">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tiempoDisponible" class="form-label">Tiempo Disponible (en horas)</label>
+                        <input type="number" class="form-control" id="tiempoDisponible" placeholder="Tiempo disponible">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrar Cancha</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de Canchas -->
+        <h2 class="mb-4">Lista de Canchas</h2>
+        <table class="table table-striped" id="canchasTable">
+            <thead>
+                <tr>
+                    <th>Cancha ID</th>
+                    <th>Proveedor ID</th>
+                    <th>Nombre</th>
+                    <th>Deporte</th>
+                    <th>Precio por Hora</th>
+                    <th>Disponible</th>
+                    <th>Alquileres</th>
+                    <th>Horarios Cancha</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>const apiUrlRegistrarCancha = 'http://localhost:44313/api/Canchas/registrarCancha';
+    const apiUrlObtenerCanchas = 'http://localhost:44313/api/Canchas/ObtenerCanchaTodo';
+
+    // Registrar nueva cancha
+    document.getElementById('canchaForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const canchaData = {
+            ProveedorID: document.getElementById('proveedorID').value,
+            Nombre: document.getElementById('nombre').value,
+            Deporte: document.getElementById('deporte').value,
+            FechaRegistro: new Date().toISOString().split('T')[0],  // Fecha actual
+            TiempoDisponible: document.getElementById('tiempoDisponible').value,
+            PrecioPorHora: document.getElementById('precioPorHora').value
+        };
+
+        fetch(apiUrlRegistrarCancha, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(canchaData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Cancha registrada exitosamente');
+            document.getElementById('canchaForm').reset();
+            cargarCanchas();
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Cargar lista de canchas
+    function cargarCanchas() {
+        fetch(apiUrlObtenerCanchas)
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('#canchasTable tbody');
+                tbody.innerHTML = '';
+                data.forEach(cancha => {
+                    const row = `<tr>
+                        <td>${cancha.CanchaID}</td>
+                        <td>${cancha.ProveedorID}</td>
+                        <td>${cancha.Nombre}</td>
+                        <td>${cancha.Deporte}</td>
+                        <td>${cancha.PrecioPorHora}</td>
+                        <td>${cancha.Disponible ? 'Sí' : 'No'}</td>
+                        <td>${cancha.Alquileres.length}</td>
+                        <td>${cancha.HorariosCancha.length}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Cargar las canchas cuando la página cargue
+    window.onload = cargarCanchas;</script>
+
+</body>
+</html>
