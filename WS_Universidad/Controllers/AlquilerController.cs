@@ -24,6 +24,32 @@ namespace WS_Universidad.Controllers
             }
         }
 
+
+        // Registrar alquiler de cancha
+        [HttpPost]
+        [Route("api/Alquileres/canchasalquiladasMes")]
+        public dynamic canchasalquiladasMes([FromBody] Alquileres dto)
+        {
+            Alquileres alquiler = new Alquileres();
+
+            String correo = null;
+            using (var context = new UNIVERSIDADEntities1())
+            {
+
+                var data = context.Alquileres.ToList();
+
+
+                 
+
+            }
+
+
+            
+
+            return true;
+        }
+
+
         // Registrar alquiler de cancha
         [HttpPost]
         [Route("api/Alquileres/registrarAlquiler")] 
@@ -64,7 +90,7 @@ namespace WS_Universidad.Controllers
             }
             
 
-            return alquiler;
+            return true;
         }
 
         private void EnviarCorreoUsuario(string correoDestino)
