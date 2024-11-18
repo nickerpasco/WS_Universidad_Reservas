@@ -30,6 +30,8 @@ namespace WS_Universidad.Controllers
         public dynamic registrarAlquiler([FromBody] Alquileres dto)
         {
             Alquileres alquiler = new Alquileres();
+
+            String correo = null;
             using (var context = new UNIVERSIDADEntities1())
             { 
 
@@ -42,8 +44,38 @@ namespace WS_Universidad.Controllers
                 alquiler.CodigoAlquiler = Guid.NewGuid().ToString();
                 context.Alquileres.Add(alquiler);
                 context.SaveChanges();
+
+
+                Usuarios data = context.Usuarios.Where(x=> x.UsuarioID == dto.UsuarioID).FirstOrDefault();
+
+                if(data != null)
+                {
+                    correo = data.Email;
+                }
+               
             }
+
+
+            /// enviar correo 
+            /// 
+            if (correo != null)
+            {
+                EnviarCorreoUsuario(correo);
+            }
+            
+
             return alquiler;
+        }
+
+        private void EnviarCorreoUsuario(string correoDestino)
+        {
+           
+
+
+            ////////
+            ///
+
+
         }
 
         // ObtenerAlquiler alquiler de cancha
