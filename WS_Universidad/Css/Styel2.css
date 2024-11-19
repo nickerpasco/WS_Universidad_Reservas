@@ -1,0 +1,96 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Establece el cuerpo para ocupar toda la pantalla */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    padding: 20px; /* Espacio ligero alrededor */
+}
+
+/* Contenedor principal del formulario */
+.form-container {
+    background-color: #fff;
+    padding: 50px; /* Aumento el padding para más espacio interno */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1200px; /* Aumento el tamaño máximo del contenedor */
+    margin: 20px; /* Mantengo el espacio alrededor */
+}
+
+/* Encabezados */
+.heading {
+    font-size: 28px; /* Aumento el tamaño del encabezado */
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Diseño del formulario en 2 columnas */
+#clienteForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas de igual tamaño */
+    gap: 20px; /* Espacio entre las columnas */
+}
+
+/* Contenedor de cada input (grupo de input) */
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Etiquetas de los inputs */
+.input-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* Estilo de los campos de entrada */
+.input-field {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* El botón debe ocupar las dos columnas */
+.submit-btn {
+    grid-column: span 2; /* Hace que el botón ocupe las dos columnas */
+    padding: 14px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 20px; /* Espacio sobre el botón */
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}
+
+.card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    font-size: 20px; /* Aumento el tamaño del texto del header */
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+

@@ -46,14 +46,14 @@
         <table class="table table-striped" id="proveedoresTable">
             <thead>
                 <tr>
-                 
+
                     <th>Proveedor ID</th>
                     <th>Nombre</th>
-                   
+
                     <th>Dirección</th>
-                     
+
                     <th>Alquileres</th>
-                    <th>Proveedores</th> 
+                    <th>Proveedores</th>
                 </tr>
             </thead>
             <tbody>
@@ -102,16 +102,16 @@
                     tbody.innerHTML = '';
                     data.forEach(proveedor => {
                         const row = `<tr>
-                           
-                            <td>${proveedor.ProveedorID}</td>
-                            <td>${proveedor.Nombre || 'N/A'}</td>
-                           
-                            <td>${proveedor.Direccion}</td>
-                          
-                          
-                            <td>${proveedor.Alquileres.length}</td>
-                            <td>${proveedor.Proveedores ? 'Sí' : 'No'}</td> 
-                        </tr>`;
+
+                                <td>${proveedor.ProveedorID}</td>
+                                <td>${proveedor.Nombre || 'N/A'}</td>
+
+                                <td>${proveedor.Direccion}</td>
+
+
+                                <td>${proveedor.Alquileres.length}</td>
+                                <td>${proveedor.Proveedores ? 'Sí' : 'No'}</td>
+                            </tr>`;
                         tbody.innerHTML += row;
                     });
                 })

@@ -314,8 +314,18 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Css\Styel2.css" />
+    <Content Include="Css\Style.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="img\exit-removebg-preview.png" />
+    <Content Include="img\logo_canchas-removebg-preview.png" />
+    <Content Include="img\pexels-furknsaglam-1596977-3131406.jpg" />
+    <Content Include="img\pexels-goumbik-590022.jpg" />
+    <Content Include="img\pexels-pavel-danilyuk-8112184.jpg" />
+    <Content Include="img\pexels-pixabay-262524.jpg" />
+    <Content Include="img\pexels-tdcat-102448.jpg" />
+    <Content Include="img\pexels-tomfisk-3507477.jpg" />
     <Content Include="Models\BDuniversidad.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>BDuniversidad.Context.cs</LastGenOutput>
@@ -385,6 +395,8 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Script\script_login.js" />
+    <Content Include="Vistas\Panel.html" />
     <Content Include="Vistas\Login.html" />
     <Content Include="Vistas\Canchas.html" />
     <Content Include="Vistas\Usuarios.html" />

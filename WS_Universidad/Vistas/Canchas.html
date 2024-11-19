@@ -61,64 +61,65 @@
         </table>
     </div>
 
-    <script>const apiUrlRegistrarCancha = 'http://localhost:44313/api/Canchas/registrarCancha';
-    const apiUrlObtenerCanchas = 'http://localhost:44313/api/Canchas/ObtenerCanchaTodo';
+    <script>
+    const apiUrlRegistrarCancha = 'http://localhost:44313/api/Canchas/registrarCancha';
+        const apiUrlObtenerCanchas = 'http://localhost:44313/api/Canchas/ObtenerCanchaTodo';
 
-    // Registrar nueva cancha
-    document.getElementById('canchaForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+        // Registrar nueva cancha
+        document.getElementById('canchaForm').addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        const canchaData = {
-            ProveedorID: document.getElementById('proveedorID').value,
-            Nombre: document.getElementById('nombre').value,
-            Deporte: document.getElementById('deporte').value,
-            FechaRegistro: new Date().toISOString().split('T')[0],  // Fecha actual
-            TiempoDisponible: document.getElementById('tiempoDisponible').value,
-            PrecioPorHora: document.getElementById('precioPorHora').value
-        };
+            const canchaData = {
+                ProveedorID: document.getElementById('proveedorID').value,
+                Nombre: document.getElementById('nombre').value,
+                Deporte: document.getElementById('deporte').value,
+                FechaRegistro: new Date().toISOString().split('T')[0],  // Fecha actual
+                TiempoDisponible: document.getElementById('tiempoDisponible').value,
+                PrecioPorHora: document.getElementById('precioPorHora').value
+            };
 
-        fetch(apiUrlRegistrarCancha, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(canchaData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('Cancha registrada exitosamente');
-            document.getElementById('canchaForm').reset();
-            cargarCanchas();
-        })
-        .catch(error => console.error('Error:', error));
-    });
-
-    // Cargar lista de canchas
-    function cargarCanchas() {
-        fetch(apiUrlObtenerCanchas)
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.querySelector('#canchasTable tbody');
-                tbody.innerHTML = '';
-                data.forEach(cancha => {
-                    const row = `<tr>
-                        <td>${cancha.CanchaID}</td>
-                        <td>${cancha.ProveedorID}</td>
-                        <td>${cancha.Nombre}</td>
-                        <td>${cancha.Deporte}</td>
-                        <td>${cancha.PrecioPorHora}</td>
-                        <td>${cancha.Disponible ? 'Sí' : 'No'}</td>
-                        <td>${cancha.Alquileres.length}</td>
-                        <td>${cancha.HorariosCancha.length}</td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                });
+            fetch(apiUrlRegistrarCancha, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(canchaData)
             })
-            .catch(error => console.error('Error:', error));
-    }
+                .then(response => response.json())
+                .then(data => {
+                    alert('Cancha registrada exitosamente');
+                    document.getElementById('canchaForm').reset();
+                    cargarCanchas();
+                })
+                .catch(error => console.error('Error:', error));
+        });
 
-    // Cargar las canchas cuando la página cargue
-    window.onload = cargarCanchas;</script>
+        // Cargar lista de canchas
+        function cargarCanchas() {
+            fetch(apiUrlObtenerCanchas)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#canchasTable tbody');
+                    tbody.innerHTML = '';
+                    data.forEach(cancha => {
+                        const row = `<tr>
+                            <td>${cancha.CanchaID}</td>
+                            <td>${cancha.ProveedorID}</td>
+                            <td>${cancha.Nombre}</td>
+                            <td>${cancha.Deporte}</td>
+                            <td>${cancha.PrecioPorHora}</td>
+                            <td>${cancha.Disponible ? 'Sí' : 'No'}</td>
+                            <td>${cancha.Alquileres.length}</td>
+                            <td>${cancha.HorariosCancha.length}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Cargar las canchas cuando la página cargue
+        window.onload = cargarCanchas;</script>
 
 </body>
 </html>

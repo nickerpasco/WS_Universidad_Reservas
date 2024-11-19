@@ -1,0 +1,275 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../img/pexels-tdcat-102448.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;    
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.left {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.right {
+    width: 50%;
+}
+
+.left {
+    flex-direction: column;
+    background-color: #f7f7f7;
+}
+
+    .left .logo {
+        margin-bottom: 30px;
+    }
+
+    .left h2 {
+        margin-bottom: 35px;
+        color: #333;
+    }
+
+.input-box {
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.input-box label {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: none;
+    color: black;
+    padding-top: 10px;
+    border: none;
+    outline: 0px;
+    font-size: 15px;
+    border-bottom: 1px solid #c7c7c7;
+    /*padding: 10px;
+border-radius: 5px;
+border: 1px solid #ccc;
+font-size: 15px;*/
+}
+
+button {
+    font-weight: bold;
+    width: 100%;
+    padding: 12px;
+    background-color: #1cd467;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #21c162;
+}
+
+.right img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+#loginError {
+    position: fixed;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    display: none;
+    z-index: 1000;
+    animation: slideDown 0.5s ease-out forwards;
+}
+
+
+/* Aseguramos que no se afecte el login */
+#menuPrincipal {
+    display: none;
+}
+
+/* Estilo para ocultar el formulario de login */
+#loginForm {
+    display: block; /* Visible cuando es necesario */
+}
+
+    /* Cuando el login es exitoso, ocultamos el formulario de login */
+#loginForm.hidden {
+    display: none;
+}
+
+.container-2 {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar los cards */
+    justify-content: flex-start; /* Aseguramos que empiece desde arriba */
+    margin-top: 380px; /* Aumenta el margen superior */
+    background-color: white; /* Fondo blanco */
+    padding: 20px; /* Añadir un poco de padding para que el contenido no esté pegado al borde */
+    border-radius: 10px; /* Bordes redondeados para mejorar el aspecto */
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); /* Opcional, para agregar sombra al contenedor */
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 40px; /* Aumentar margen inferior para separar del contenido debajo */
+    margin-top: 20px; /* Aseguramos que tenga espacio encima también */
+}
+
+/* Estilos de las filas de cards */
+.row.g-4 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centrar los items en cada fila */
+    gap: 20px; /* Espaciado entre los cards */
+}
+
+/* Estilos para las columnas de los cards */
+.col-md-6.col-lg-4 {
+    width: 100%;
+    max-width: 31%; /* Limita el tamaño para 3 cards por fila */
+    margin-bottom: 30px;
+}
+
+/* Asegurarse de que las imágenes de los cards tengan el tamaño adecuado */
+.card-option {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    margin-bottom: 20px;
+    text-align: center;
+    transition: all 0.3s ease; /* Añadimos transición para suavizar el efecto */
+}
+
+/* Efecto al pasar el mouse sobre el card */
+.card-option:hover {
+    transform: translateY(-10px); /* Eleva el card ligeramente */
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 2px solid #ddd;
+    transition: transform 0.3s ease; /* Transición suave para la imagen */
+}
+
+/* Efecto al pasar el mouse sobre la imagen dentro del card */
+.card-option:hover .card-img-top {
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño de la imagen */
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Títulos y texto dentro de los cards */
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.card .btn {
+    font-size: 14px;
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+
+/* Botón centrado en la parte inferior del card */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-option .btn {
+    display: inline-block;
+    padding: 12px 24px; /* Ajusta el padding para darle forma de botón */
+    font-size: 16px; /* Tamaño de la fuente */
+    font-weight: bold;
+    text-decoration: none; /* Eliminar subrayado */
+    background-color: #1cd467; /* Color de fondo */
+    color: white; /* Color del texto */
+    border-radius: 5px; /* Bordes redondeados */
+    text-align: center; /* Asegura que el texto esté centrado */
+    transition: all 0.3s ease; /* Transición suave para los efectos */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+    /* Efecto hover: Cambia color de fondo y agrega sombra */
+    .card-option .btn:hover {
+        background-color: #21c162; /* Fondo verde más oscuro */
+        color: #fff; /* Texto blanco */
+        transform: translateY(-3px); /* Efecto de elevación */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra al pasar el mouse */
+    }
+
+    /* Efecto active: cuando se hace clic en el botón */
+    .card-option .btn:active {
+        transform: translateY(0); /* Elimina el efecto de elevación al hacer clic */
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* Sombra más ligera al presionar */
+    }
+
+    /* Si deseas un borde cuando pasa el mouse sobre el enlace */
+    .card-option .btn:hover {
+        border: 2px solid #1cd467; /* Borde verde cuando el mouse está sobre el enlace */
+    }
+

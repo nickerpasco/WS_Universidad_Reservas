@@ -8,145 +8,145 @@
 </head>
 <body>
 
-<div class="container mt-5">
-    <h1 class="mb-4">Gestión de Alumnos</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4">Gestión de Alumnos</h1>
 
- 
-    <div class="card mb-4">
-        <div class="card-header">Crear/Modificar Alumno</div>
-        <div class="card-body">
-            <form id="alumnoForm">
-                <div class="mb-3">
-                    <label for="alumnoId" class="form-label">ID Alumno (Sólo para modificar)</label>
-                    <input type="text" class="form-control" id="alumnoId" placeholder="ID Alumno">
-                </div>
-                <div class="mb-3">
-                    <label for="codigoAlumno" class="form-label">Código Alumno</label>
-                    <input type="text" class="form-control" id="codigoAlumno" placeholder="Código Alumno">
-                </div>
-                <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" placeholder="Nombre">
-                </div>
-                <div class="mb-3">
-                    <label for="apellido" class="form-label">Apellido</label>
-                    <input type="text" class="form-control" id="apellido" placeholder="Apellido">
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="Email">
-                </div>
-                <button type="submit" class="btn btn-primary" onclick="crearModificarAlumno()">Enviar</button>
-            </form>
+
+        <div class="card mb-4">
+            <div class="card-header">Crear/Modificar Alumno</div>
+            <div class="card-body">
+                <form id="alumnoForm">
+                    <div class="mb-3">
+                        <label for="alumnoId" class="form-label">ID Alumno (Sólo para modificar)</label>
+                        <input type="text" class="form-control" id="alumnoId" placeholder="ID Alumno">
+                    </div>
+                    <div class="mb-3">
+                        <label for="codigoAlumno" class="form-label">Código Alumno</label>
+                        <input type="text" class="form-control" id="codigoAlumno" placeholder="Código Alumno">
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" placeholder="Apellido">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Email">
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="crearModificarAlumno()">Enviar</button>
+                </form>
+            </div>
         </div>
+
+
+        <div class="card mb-4">
+            <div class="card-header">Eliminar Alumno</div>
+            <div class="card-body">
+                <form id="deleteAlumnoForm">
+                    <div class="mb-3">
+                        <label for="deleteAlumnoId" class="form-label">ID Alumno</label>
+                        <input type="text" class="form-control" id="deleteAlumnoId" placeholder="ID Alumno">
+                    </div>
+                    <button type="button" class="btn btn-danger" onclick="eliminarAlumno()">Eliminar</button>
+                </form>
+            </div>
+        </div>
+
+
+        <h2 class="mb-4">Lista de Alumnos</h2>
+        <table class="table table-striped" id="alumnosTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 
- 
-    <div class="card mb-4">
-        <div class="card-header">Eliminar Alumno</div>
-        <div class="card-body">
-            <form id="deleteAlumnoForm">
-                <div class="mb-3">
-                    <label for="deleteAlumnoId" class="form-label">ID Alumno</label>
-                    <input type="text" class="form-control" id="deleteAlumnoId" placeholder="ID Alumno">
-                </div>
-                <button type="button" class="btn btn-danger" onclick="eliminarAlumno()">Eliminar</button>
-            </form>
-        </div>
-    </div>
+    <script>
+        const apiUrl = 'http://localhost:44313/api/Alumnos';
 
-     
-    <h2 class="mb-4">Lista de Alumnos</h2>
-    <table class="table table-striped" id="alumnosTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
+        // Crear o modificar alumno
+        function crearModificarAlumno() {
+            event.preventDefault();
+            const alumnoId = document.getElementById('alumnoId').value;
+            const alumnoData = {
+                AlumnoID: alumnoId,
+                CodigoAlumno: document.getElementById('codigoAlumno').value,
+                Nombre: document.getElementById('nombre').value,
+                Apellido: document.getElementById('apellido').value,
+                Email: document.getElementById('email').value
+            };
 
-<script>
-    const apiUrl = 'http://localhost:44313/api/Alumnos';
+            const method = alumnoId ? 'PUT' : 'POST';
+            const endpoint = alumnoId ? '/update' : '/create';
 
-    // Crear o modificar alumno
-    function crearModificarAlumno() {
-        event.preventDefault();
-        const alumnoId = document.getElementById('alumnoId').value;
-        const alumnoData = {
-            AlumnoID: alumnoId,
-            CodigoAlumno: document.getElementById('codigoAlumno').value,
-            Nombre: document.getElementById('nombre').value,
-            Apellido: document.getElementById('apellido').value,
-            Email: document.getElementById('email').value
-        };
-        
-        const method = alumnoId ? 'PUT' : 'POST';
-        const endpoint = alumnoId ? '/update' : '/create';
-
-        fetch(apiUrl + endpoint, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(alumnoData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('Alumno creado/modificado exitosamente');
-            document.getElementById('alumnoForm').reset();
-            cargarAlumnos();
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-    // Eliminar alumno
-    function eliminarAlumno() {
-        const alumnoId = document.getElementById('deleteAlumnoId').value;
-        fetch(apiUrl + '/delete', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ AlumnoID: alumnoId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('Alumno eliminado exitosamente');
-            document.getElementById('deleteAlumnoForm').reset();
-            cargarAlumnos();
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-    // Cargar lista de alumnos
-    function cargarAlumnos() {
-        fetch(apiUrl + '/read')
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.querySelector('#alumnosTable tbody');
-                tbody.innerHTML = '';
-                data.forEach(alumno => {
-                    const row = `<tr>
-                        <td>${alumno.AlumnoID}</td>
-                        <td>${alumno.Nombre}</td>
-                        <td>${alumno.Apellido}</td>
-                        <td>${alumno.Email}</td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                });
+            fetch(apiUrl + endpoint, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(alumnoData)
             })
-            .catch(error => console.error('Error:', error));
-    }
+                .then(response => response.json())
+                .then(data => {
+                    alert('Alumno creado/modificado exitosamente');
+                    document.getElementById('alumnoForm').reset();
+                    cargarAlumnos();
+                })
+                .catch(error => console.error('Error:', error));
+        }
 
-    // Cargar los alumnos cuando la página cargue
-    window.onload = cargarAlumnos;
-</script>
+        // Eliminar alumno
+        function eliminarAlumno() {
+            const alumnoId = document.getElementById('deleteAlumnoId').value;
+            fetch(apiUrl + '/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ AlumnoID: alumnoId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Alumno eliminado exitosamente');
+                    document.getElementById('deleteAlumnoForm').reset();
+                    cargarAlumnos();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Cargar lista de alumnos
+        function cargarAlumnos() {
+            fetch(apiUrl + '/read')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#alumnosTable tbody');
+                    tbody.innerHTML = '';
+                    data.forEach(alumno => {
+                        const row = `<tr>
+                            <td>${alumno.AlumnoID}</td>
+                            <td>${alumno.Nombre}</td>
+                            <td>${alumno.Apellido}</td>
+                            <td>${alumno.Email}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Cargar los alumnos cuando la página cargue
+        window.onload = cargarAlumnos;
+    </script>
 
 </body>
 </html>
