@@ -396,9 +396,11 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Script\script_login.js" />
+    <Content Include="Vistas\Reportes.html" />
     <Content Include="Vistas\Panel.html" />
     <Content Include="Vistas\Login.html" />
     <Content Include="Vistas\Canchas.html" />
+    <Content Include="Vistas\Reservas.html" />
     <Content Include="Vistas\Usuarios.html" />
     <Content Include="Vistas\Proveedores.html" />
     <Content Include="Vistas\Alumnos.html" />

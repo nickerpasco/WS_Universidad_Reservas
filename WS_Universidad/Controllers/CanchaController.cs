@@ -12,7 +12,7 @@ namespace WS_Universidad.Controllers
     public class CanchaController : ApiController
     {
         // Ingresar a la web y validar cuenta del proveedor
-        [HttpPost] 
+        [HttpPost]
         [Route("api/Canchas/validarCuentaProveedor")]
         public dynamic validarCuentaProveedor([FromBody] Proveedores dto)
         {
@@ -25,7 +25,7 @@ namespace WS_Universidad.Controllers
 
         // Registrar cancha
         [HttpPost]
-        [Route("api/Canchas/registrarCancha")] 
+        [Route("api/Canchas/registrarCancha")]
         public dynamic registrarCancha([FromBody] Canchas dto)
         {
             Canchas cancha = new Canchas();
@@ -64,13 +64,13 @@ namespace WS_Universidad.Controllers
                 cancha.Disponible = true;
 
                 context.Entry(cancha).State = System.Data.Entity.EntityState.Modified;
-                context.SaveChanges(); 
+                context.SaveChanges();
             }
 
 
-         
+
             return dto;
-             
+
         }
 
 
@@ -81,7 +81,7 @@ namespace WS_Universidad.Controllers
             Canchas cancha = new Canchas();
             using (var context = new db_aaf83c_universidadtestEntities())
             {
-                 
+
 
                 var data = context.Canchas.Select(a => new
                 {
@@ -91,16 +91,16 @@ namespace WS_Universidad.Controllers
                     a.Deporte,
                     a.Direccion,
                     a.PrecioPorHora,
-                    a.Disponible, 
+                    a.Disponible,
 
-                }).Where(x=> x.CanchaID== IdCancha).ToList();
+                }).Where(x => x.CanchaID == IdCancha).ToList();
 
 
                 string alumnosJson = JsonConvert.SerializeObject(data, Formatting.Indented);
                 var lstData = JsonConvert.DeserializeObject<List<Canchas>>(alumnosJson);
                 return lstData;
             }
-          
+
         }
 
         [HttpGet]
@@ -151,7 +151,7 @@ namespace WS_Universidad.Controllers
 
 
         // Verificar registro en el sistema de canchas
-        [HttpGet] 
+        [HttpGet]
         [Route("api/Canchas/verificarRegistroCancha/{id}")]
         public dynamic verificarRegistroCancha(int id)
         {
@@ -159,6 +159,29 @@ namespace WS_Universidad.Controllers
             {
                 var cancha = context.Canchas.FirstOrDefault(c => c.CanchaID == id);
                 return cancha;
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("api/Canchas/obtenerDisponibles")]
+        public IHttpActionResult ObtenerCanchasDisponibles()
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                var canchas = context.Canchas
+                    .Where(c => c.Disponible == true)
+                    .Select(c => new
+                    {
+                        c.CanchaID,
+                        c.Nombre,
+                        c.Deporte,
+                        c.PrecioPorHora
+                    })
+                    .ToList();
+
+                return Ok(canchas);
             }
         }
     }

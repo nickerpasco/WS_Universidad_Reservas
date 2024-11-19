@@ -28,6 +28,28 @@ namespace WS_Universidad.Controllers
         }
 
 
+        [HttpGet]
+        [Route("api/Alquileres/IngresosPorMes")]
+        public dynamic IngresosPorMes()
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                var ingresos = context.Alquileres
+                    .GroupBy(a => new { a.FechaAlquiler.Year, a.FechaAlquiler.Month }) // Agrupa por año y mes
+                    .Select(g => new
+                    {
+                        Mes = g.Key.Month,
+                        Año = g.Key.Year,
+                        TotalIngresos = g.Sum(a => a.MontoTotal)
+                    })
+                    .OrderBy(g => g.Año).ThenBy(g => g.Mes) // Ordena por año y mes
+                    .ToList();
+
+                return ingresos;
+            }
+        }
+
+
         // Registrar alquiler de cancha
         [HttpPost]
         [Route("api/Alquileres/canchasalquiladasMes")]
@@ -92,7 +114,7 @@ namespace WS_Universidad.Controllers
 
 
                 // Enviar correo
-                mensajeCorreo = $"Reserva confirmada:\nCancha: {cancha.Nombre}\nFecha: {alquiler.FechaAlquiler.ToShortDateString()}";
+                mensajeCorreo = $"Reserva confirmada:\nCancha: {cancha.Nombre + " : " + cancha.Deporte }\nFecha: {alquiler.FechaAlquiler.ToShortDateString()}";
 
 
                 Usuarios data = context.Usuarios.Where(x=> x.UsuarioID == dto.UsuarioID).FirstOrDefault();
@@ -127,13 +149,13 @@ namespace WS_Universidad.Controllers
             const string fromPassword = "qyyowoybmldfvptt";
 
             CorreoMailArchivo(correoCliente, correoCliente,
-                                                   correoCliente, "CONFIRMACIÓN DE RESERVA", "<table align='center' border='0' cellpadding='0' cellspacing='0'  </table>", UserName, fromPassword);
+                                                   correoCliente, "CONFIRMACIÓN DE RESERVA", "<table align='center' border='0' cellpadding='0' cellspacing='0'  </table>", UserName, fromPassword, detallesReserva);
 
         }
 
 
 
-        public static void CorreoMailArchivo( string str_pTo, string str_pCC, string str_pBCC, string asunto, string mensaje, string UserName, string Password)
+        public static void CorreoMailArchivo( string str_pTo, string str_pCC, string str_pBCC, string asunto, string mensaje, string UserName, string Password,string detallesReserva)
         {
        
 
@@ -175,7 +197,7 @@ namespace WS_Universidad.Controllers
 
 
                 const string subject = "Confirmación de Reserva de Cancha";
-                string detallesReserva = "Su reserva ha sido confirmada para el 25 de noviembre de 2024 a las 10:00 AM.";
+                //string detallesReserva = "Su reserva ha sido confirmada para el 25 de noviembre de 2024 a las 10:00 AM.";
                 string body = $"Estimado cliente,<br><br>{detallesReserva}<br><br>Gracias por reservar con nosotros.";
 
                 // Crear el contenido HTML con estilo atractivo
@@ -242,7 +264,7 @@ namespace WS_Universidad.Controllers
                 <div class='header'>{subject}</div>
                 <div class='body'>
                     <p>{body}</p>
-                    <p><strong>Fecha y hora de la reserva:</strong> 25 de noviembre de 2024, 10:00 AM</p>
+                    <p><strong>{detallesReserva}</p>
                     <p>Para más detalles o para realizar cambios en su reserva, por favor haga clic en el siguiente botón:</p>
                     <a href='https://www.tusitio.com/reservas' class='button'>Ver mi reserva</a>
                 </div>
@@ -383,6 +405,51 @@ namespace WS_Universidad.Controllers
             {
                 var pago = context.Pagos.FirstOrDefault(p => p.AlquilerID == dto.AlquilerID && p.Estado == "Confirmado");
                 return pago;
+            }
+        }
+
+
+
+
+        [HttpGet]
+        [Route("api/Canchas/EstadisticaDeporte")]
+        public dynamic EstadisticaDeporte()
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                // Agrupa las canchas por el deporte y cuenta cuántas hay para cada uno
+                var estadisticas = context.Canchas
+                    .GroupBy(c => c.Deporte)
+                    .Select(g => new
+                    {
+                        Deporte = g.Key, // Nombre del deporte
+                        TotalCanchas = g.Count() // Número total de canchas para ese deporte
+                    })
+                    .OrderByDescending(g => g.TotalCanchas) // Ordenar de mayor a menor
+                    .ToList();
+
+                return estadisticas; // Devuelve el resultado como JSON
+            }
+        }
+
+        [HttpGet]
+        [Route("api/Canchas/IngresosPorDeporte")]
+        public dynamic IngresosPorDeporte()
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                var ingresos = context.Canchas
+                    .Where(c => c.Deporte != null && c.PrecioPorHora != null) // Ignorar registros con valores nulos
+                    .GroupBy(c => c.Deporte) // Agrupar por deporte
+                    .Select(g => new
+                    {
+                        Deporte = g.Key, // Nombre del deporte
+                        TotalIngresos = g.Sum(c => c.PrecioPorHora) // Suma de precios por deporte
+                    })
+                    .OrderByDescending(g => g.TotalIngresos) // Ordenar de mayor a menor ingreso
+                    .ToList();
+
+                return ingresos;
             }
         }
     }
