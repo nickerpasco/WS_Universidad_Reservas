@@ -18,7 +18,7 @@ namespace WS_Universidad.Controllers
         public dynamic crearCuentaProveedor([FromBody] Proveedores dto)
         {
             Proveedores proveedor = new Proveedores();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 proveedor.Empresa = dto.Empresa;
                 proveedor.Telefono = dto.Telefono;
@@ -37,7 +37,7 @@ namespace WS_Universidad.Controllers
         public dynamic registrarCanchaProveedor([FromBody] Canchas dto)
         {
             Canchas cancha = new Canchas();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 cancha.ProveedorID = dto.ProveedorID;
                 cancha.Nombre = dto.Nombre;
@@ -56,7 +56,7 @@ namespace WS_Universidad.Controllers
         public dynamic ObtenerProveedores()
         {
             
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
 

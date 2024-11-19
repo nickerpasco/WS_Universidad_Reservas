@@ -17,7 +17,7 @@ namespace WS_Universidad.Controllers
         [Route("api/Alquileres/ObtenerAlquiler")]
         public dynamic validarUsuario([FromBody] Usuarios dto)
         {
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 var usuario = context.Usuarios.FirstOrDefault(u => u.Email == dto.Email && u.Contraseña == dto.Contraseña);
                 return usuario;
@@ -33,7 +33,7 @@ namespace WS_Universidad.Controllers
             Alquileres alquiler = new Alquileres();
 
             String correo = null;
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                 var data = context.Alquileres.ToList();
@@ -58,7 +58,7 @@ namespace WS_Universidad.Controllers
             Alquileres alquiler = new Alquileres();
 
             String correo = null;
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             { 
 
                 alquiler.UsuarioID = dto.UsuarioID;
@@ -110,7 +110,7 @@ namespace WS_Universidad.Controllers
         public dynamic ObtenerAlquiler(int IdAlquiler)
         {
             Alquileres alquiler = new Alquileres();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                 
@@ -145,7 +145,7 @@ namespace WS_Universidad.Controllers
         public dynamic ActualizarAlquiler([FromBody] Alquileres dto)
         {
             Alquileres alquiler = new Alquileres();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                 alquiler = context.Alquileres.Where(x => x.AlquilerID == dto.AlquilerID).FirstOrDefault();
@@ -172,7 +172,7 @@ namespace WS_Universidad.Controllers
         public dynamic EliminarAlquiler([FromBody] Alquileres dto)
         {
             Alquileres alquiler = new Alquileres();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                 alquiler = context.Alquileres.Where(x => x.AlquilerID == dto.AlquilerID).FirstOrDefault();
@@ -191,7 +191,7 @@ namespace WS_Universidad.Controllers
         [Route("api/Alquileres/verificarPago")]
         public dynamic verificarPago([FromBody] Pagos dto)
         {
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 var pago = context.Pagos.FirstOrDefault(p => p.AlquilerID == dto.AlquilerID && p.Estado == "Confirmado");
                 return pago;

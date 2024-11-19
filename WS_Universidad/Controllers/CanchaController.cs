@@ -16,7 +16,7 @@ namespace WS_Universidad.Controllers
         [Route("api/Canchas/validarCuentaProveedor")]
         public dynamic validarCuentaProveedor([FromBody] Proveedores dto)
         {
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 var proveedor = context.Proveedores.FirstOrDefault(p => p.UsuarioID == dto.UsuarioID);
                 return proveedor != null ? "Cuenta validada" : "Credenciales incorrectas";
@@ -29,7 +29,7 @@ namespace WS_Universidad.Controllers
         public dynamic registrarCancha([FromBody] Canchas dto)
         {
             Canchas cancha = new Canchas();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 cancha.ProveedorID = dto.ProveedorID;
                 cancha.Nombre = dto.Nombre;
@@ -50,7 +50,7 @@ namespace WS_Universidad.Controllers
         public dynamic ActualizarCancha([FromBody] Canchas dto)
         {
             Canchas cancha = new Canchas();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                 cancha = context.Canchas.FirstOrDefault(c => c.CanchaID == dto.CanchaID);
@@ -79,7 +79,7 @@ namespace WS_Universidad.Controllers
         public dynamic ObtenerCancha(int IdCancha)
         {
             Canchas cancha = new Canchas();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                  
 
@@ -108,7 +108,7 @@ namespace WS_Universidad.Controllers
         public dynamic ObtenerCanchaTodo()
         {
             Canchas cancha = new Canchas();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
 
@@ -138,7 +138,7 @@ namespace WS_Universidad.Controllers
         public dynamic Eliminarcancha([FromBody] Canchas dto)
         {
             Canchas cancha = new Canchas();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                 cancha = context.Canchas.FirstOrDefault(c => c.CanchaID == dto.CanchaID);
@@ -155,7 +155,7 @@ namespace WS_Universidad.Controllers
         [Route("api/Canchas/verificarRegistroCancha/{id}")]
         public dynamic verificarRegistroCancha(int id)
         {
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 var cancha = context.Canchas.FirstOrDefault(c => c.CanchaID == id);
                 return cancha;

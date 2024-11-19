@@ -19,7 +19,7 @@ namespace WS_Universidad.Controllers
         public dynamic crearCuentaUsuarios([FromBody] Usuarios dto)
         {
             Usuarios cliente = new Usuarios();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
 
@@ -53,7 +53,7 @@ namespace WS_Universidad.Controllers
         public dynamic ObtenerClientes()
         {
 
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
 
@@ -86,7 +86,7 @@ namespace WS_Universidad.Controllers
         public dynamic seleccionarCanchaDisponible()
         {
             List<Canchas> canchasDisponibles = new List<Canchas>();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 canchasDisponibles = context.Canchas.Where(c => c.Disponible == true).ToList();
             }

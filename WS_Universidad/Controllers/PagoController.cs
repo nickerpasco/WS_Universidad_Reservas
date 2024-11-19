@@ -16,7 +16,7 @@ namespace WS_Universidad.Controllers
         public dynamic confirmarPago([FromBody] Pagos dto)
         {
             Pagos pago = new Pagos();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 pago.AlquilerID = dto.AlquilerID;
                 pago.TipoPago = dto.TipoPago;
@@ -33,7 +33,7 @@ namespace WS_Universidad.Controllers
         [Route("imprimirBoleta/{id}")]
         public dynamic imprimirBoleta(int id)
         {
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 var pago = context.Pagos.FirstOrDefault(p => p.PagoID == id);
                 return pago != null ? $"Boleta generada para el pago ID: {pago.PagoID}" : "Pago no encontrado";

@@ -21,7 +21,7 @@ namespace WS_Universidad.Controllers
                 return new { success = false, message = "Datos de usuario inválidos." };
             }
 
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
                 // Buscar usuario por nombre o correo electrónico
                 var usuario = context.Usuarios.FirstOrDefault(u => u.Nombre == dto.Nombre || u.Email == dto.Email);

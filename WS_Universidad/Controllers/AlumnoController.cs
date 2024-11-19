@@ -19,7 +19,7 @@ namespace WS_Universidad.Controllers
         {
 
             Alumno bean = new Alumno();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                 bean.Apellido = dto.Apellido;
@@ -40,7 +40,7 @@ namespace WS_Universidad.Controllers
         {
 
             List<Alumno> lstAlumnos = new List<Alumno>();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                 var alumnos = context.Alumno.Select(a => new
@@ -68,7 +68,7 @@ namespace WS_Universidad.Controllers
         {
 
             Alumno bean = new Alumno();
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             {
 
                
@@ -93,7 +93,7 @@ namespace WS_Universidad.Controllers
         {
             Alumno bean = new Alumno();
 
-            using (var context = new UNIVERSIDADEntities1())
+            using (var context = new db_aaf83c_universidadtestEntities())
             { 
 
                 bean = context.Alumno.Where(a => a.AlumnoID == dto.AlumnoID).FirstOrDefault();
