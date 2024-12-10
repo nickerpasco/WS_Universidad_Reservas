@@ -25,7 +25,7 @@ namespace WS_Universidad.Controllers
                 var usuario = context.Usuarios.FirstOrDefault(u => u.Email == dto.Email && u.Contraseña == dto.Contraseña);
                 return usuario;
             }
-        }
+        } 
 
 
         [HttpGet]
