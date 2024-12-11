@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login y Menú Principal</title>
+    <link rel="stylesheet" href="../Css/Style.css" />
+    <script src="../Script/script_login.js"></script>
+</head>
+<body>
+
+    <div class="container" id="loginForm">
+        <!-- Formulario de login -->
+        <div class="container">
+            <div class="login-box">
+                <div class="left">
+                    <img class="logo" src="../img/logo_canchas-removebg-preview.png" alt="alt" />
+                    <h2>Iniciar sesión</h2>
+                    <form id="formLogin">
+                        <div class="input-box">
+                            <label for="email">Correo eléctronico: </label>
+                            <input type="text" id="email" name="email" placeholder="Ingrese su correo" required>
+                        </div>
+                        <div class="input-box">
+                            <label for="password">Contraseña: </label>
+                            <input type="password" id="password" name="password" placeholder="********" required>
+                        </div>
+                        <button type="submit">Ingresar</button>
+                    </form>
+                    <div id="loginError" class="text-danger mt-2" style="display:none;">Error: Usuario o contraseña incorrectos.</div>
+                </div>
+                <div class="right">
+                    <img src="../img/pexels-furknsaglam-1596977-3131406.jpg" alt="alt" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menú Principal con cards -->
+    <div id="menuPrincipal" class="container-2">
+        <h2 class="text-center mb-4">Menú Principal</h2>
+        <div class="row g-4">
+
+
+
+
+
+            <!-- Card Nuevos Usuarios -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-option">
+                    <img src="../img/pexels-pixabay-262524.jpg" class="card-img-top" alt="Nuevos Usuarios">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Nuevos Usuarios</h5>
+                        <p class="card-text">Gestiona los usuarios nuevos del sistema.</p>
+                        <a href="http://localhost:44313/Vistas/Usuarios.html" class="btn btn-primary">Ver Usuarios</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Canchas -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-option">
+                    <img src="../img/pexels-tomfisk-3507477.jpg" class="card-img-top" alt="Canchas">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Canchas</h5>
+                        <p class="card-text">Consulta y administra las canchas disponibles.</p>
+                        <a href="http://localhost:44313/Vistas/Canchas.html" class="btn btn-primary">Ver Canchas</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Proveedores -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-option">
+                    <img src="../img/pexels-pavel-danilyuk-8112184.jpg" class="card-img-top" alt="Proveedores">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Proveedores</h5>
+                        <p class="card-text">Consulta y gestiona los proveedores del sistema.</p>
+                        <a href="http://localhost:44313/Vistas/Proveedores.html" class="btn btn-primary">Ver Proveedores</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segunda fila de cards -->
+        <div class="row g-4">
+            <!-- Card Reportes -->
+
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-option">
+                    <img src="../img/pexels-goumbik-590022.jpg" class="card-img-top" alt="Reportes">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Reservar Canchas</h5>
+                        <p class="card-text">Reservar canchas disponibles.</p>
+                        <a href="http://localhost:44313/Vistas/reservas.html" class="btn btn-primary">Reservar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-option">
+                    <img src="../img/pexels-goumbik-590022.jpg" class="card-img-top" alt="Reportes">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Reportes</h5>
+                        <p class="card-text">Genera y consulta los reportes del sistema.</p>
+                        <a href="http://localhost:44313/Vistas/Reportes.html" class="btn btn-primary">Ver Reportes</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Cerrar Sesión -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-option">
+                    <img src="../img/exit-removebg-preview.png" class="card-img-top" alt="Cerrar Sesión">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Cerrar Sesión</h5>
+                        <p class="card-text">Sal del sistema de forma segura.</p>
+                        <a href="#" class="btn btn-danger" onclick="cerrarSesion()">Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const apiUrlLogin = 'http://localhost:44313/api/Usuarios/login';
+
+        // Manejar el envío del formulario de login
+        document.getElementById('formLogin').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const loginData = {
+                Email: document.getElementById('email').value,
+                Contraseña: document.getElementById('password').value
+            };
+
+            fetch(apiUrlLogin, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarMenuPrincipal();
+                    } else {
+                        mostrarErrorLogin();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Mostrar menú principal
+        function mostrarMenuPrincipal() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('menuPrincipal').style.display = 'block';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        // Mostrar error de login
+        function mostrarErrorLogin() {
+            const errorElement = document.getElementById('loginError');
+            errorElement.style.display = 'block';
+            errorElement.style.animation = 'none';
+            errorElement.offsetHeight;
+            errorElement.style.animation = 'slideDown 0.5s ease-out forwards';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Opciones del menú (Ejemplo: cargar usuarios, canchas, proveedores)
+        function mostrarUsuarios() {
+
+        }
+
+        function mostrarCanchas() {
+
+        }
+
+        function mostrarProveedores() {
+
+        }
+
+        // Cerrar sesión (Regresar al formulario de login)
+        function cerrarSesion() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('menuPrincipal').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

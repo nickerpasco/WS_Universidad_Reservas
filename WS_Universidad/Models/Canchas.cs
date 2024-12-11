@@ -26,6 +26,7 @@ namespace WS_Universidad.Models
         public string Nombre { get; set; }
         public string Deporte { get; set; }
         public string Direccion { get; set; }
+        public string Telefono { get; set; }
         public Nullable<decimal> PrecioPorHora { get; set; }
         public Nullable<bool> Disponible { get; set; }
     

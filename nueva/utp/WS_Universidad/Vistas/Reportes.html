@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes</title>
+    <style>
+        /* Estilo general */
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .chart-box {
+            width: 35%; /* Ajusta el tamaño del contenedor */
+            height: 350px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        canvas {
+            width: 90% !important;
+            height: 85% !important;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #6bf1ab, #1f794e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-family: 'Arial', sans-serif;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Reportes Estadísticos</h1>
+
+    <div class="chart-container">
+        <!-- Gráfico 1 -->
+        <div class="chart-box">
+            <h3>Precio de Alquiler de Canchas</h3>
+            <canvas id="priceChart"></canvas>
+        </div>
+
+        <!-- Gráfico 2 -->
+        <div class="chart-box">
+            <h3>Cantidad de Canchas por Deporte</h3>
+            <canvas id="sportsChart"></canvas>
+        </div>
+
+        <!-- Gráfico 3 -->
+        <div class="chart-box">
+            <h3>Ingresos Totales por Deporte</h3>
+            <canvas id="incomeChart"></canvas>
+        </div>
+
+        <!-- Gráfico 4 -->
+        <div class="chart-box">
+            <h3>Ingresos Totales por Mes</h3>
+            <canvas id="incomeByMonthChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Gráfico 1: Precio de Alquiler
+        const priceCtx = document.getElementById('priceChart');
+        const priceChart = new Chart(priceCtx, {
+            type: 'bar',
+            data: {
+                labels: [], // Nombres de las canchas
+                datasets: [{
+                    label: 'Precio por Hora',
+                    data: [],
+                    backgroundColor: ['#6bf1ab', '#63d69f', '#438c6c', '#509c7f', '#1f794e', '#34444c'],
+                    borderColor: ['black'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Gráfico 2: Canchas por Deporte
+        const sportsCtx = document.getElementById('sportsChart');
+        const sportsChart = new Chart(sportsCtx, {
+            type: 'pie',
+            data: {
+                labels: [], // Deportes dinámicos
+                datasets: [{
+                    label: 'Canchas por Deporte',
+                    data: [],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                    borderColor: ['black'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+
+        // Gráfico 3: Ingresos Totales por Deporte
+        const incomeCtx = document.getElementById('incomeChart');
+        const incomeChart = new Chart(incomeCtx, {
+            type: 'line',
+            data: {
+                labels: [], // Deportes dinámicos
+                datasets: [{
+                    label: 'Ingresos Totales',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    tension: 0.3 // Línea curva
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Gráfico 4: Ingresos Totales por Mes
+        const incomeByMonthCtx = document.getElementById('incomeByMonthChart');
+        const incomeByMonthChart = new Chart(incomeByMonthCtx, {
+            type: 'bar',
+            data: {
+                labels: [], // Meses dinámicos
+                datasets: [{
+                    label: 'Ingresos Totales',
+                    data: [],
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // URLs del backend
+        const canchasUrl = 'http://localhost:44313/api/Canchas/ObtenerCanchaTodo';
+        const estadisticasUrl = 'http://localhost:44313/api/Canchas/EstadisticaDeporte';
+        const ingresosUrl = 'http://localhost:44313/api/Canchas/IngresosPorDeporte'; // Endpoint para ingresos por deporte
+        const ingresosPorMesUrl = 'http://localhost:44313/api/Alquileres/IngresosPorMes'; // Endpoint para ingresos por mes
+
+        // Obtener datos para Gráfico 1 (Precios)
+        fetch(canchasUrl)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(element => {
+                    priceChart.data.labels.push(element.Nombre);
+                    priceChart.data.datasets[0].data.push(element.PrecioPorHora);
+                });
+                priceChart.update();
+            })
+            .catch(error => console.log('Error al obtener datos de precios:', error));
+
+        // Obtener datos para Gráfico 2 (Canchas por Deporte)
+        fetch(estadisticasUrl)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(element => {
+                    sportsChart.data.labels.push(element.Deporte);
+                    sportsChart.data.datasets[0].data.push(element.TotalCanchas);
+                });
+                sportsChart.update();
+            })
+            .catch(error => console.log('Error al obtener estadísticas:', error));
+
+        // Obtener datos para Gráfico 3 (Ingresos Totales por Deporte)
+        fetch(ingresosUrl)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(element => {
+                    incomeChart.data.labels.push(element.Deporte);
+                    incomeChart.data.datasets[0].data.push(element.TotalIngresos);
+                });
+                incomeChart.update();
+            })
+            .catch(error => console.log('Error al obtener datos de ingresos:', error));
+
+        // Obtener datos para Gráfico 4 (Ingresos Totales por Mes)
+        fetch(ingresosPorMesUrl)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(item => {
+                    incomeByMonthChart.data.labels.push(`${item.Mes}/${item.Año}`);
+                    incomeByMonthChart.data.datasets[0].data.push(item.TotalIngresos);
+                });
+                incomeByMonthChart.update();
+            })
+            .catch(error => console.log('Error al obtener datos de ingresos por mes:', error));
+    </script>
+
+</body>
+</html>
+
+

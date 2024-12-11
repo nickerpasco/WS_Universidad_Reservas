@@ -40,6 +40,161 @@
                 </form>
             </div>
         </div>
+        <div id="modalEditarCancha" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="cerrarModal()">&times;</span>
+                <h2>Editar Cancha</h2>
+                <form id="editarCanchaForm">
+                    <div class="input-group">
+                        <label for="editarNombre">Nombre:</label>
+                        <input type="text" id="editarNombre" class="input-field">
+                    </div>
+                    <div class="input-group">
+                        <label for="editarDeporte">Deporte:</label>
+                        <input type="text" id="editarDeporte" class="input-field">
+                    </div>
+                    <div class="input-group">
+                        <label for="editarPrecioPorHora">Precio por Hora:</label>
+                        <input type="number" id="editarPrecioPorHora" class="input-field">
+                    </div>
+                    <input type="hidden" id="editarCanchaID">
+                    <button type="submit" class="submit-btn">Guardar Cambios</button>
+                </form>
+            </div>
+        </div>
+        <style>
+            .modal-content {
+                background-color: #fff;
+                margin: 10% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 40%; /* Ajusta el ancho según sea necesario */
+                border-radius: 10px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+                .modal-content h2 {
+                    margin-bottom: 20px;
+                    font-size: 24px;
+                    text-align: center;
+                    color: #333;
+                }
+
+            .input-group {
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 15px;
+            }
+
+                .input-group label {
+                    margin-bottom: 5px;
+                    font-weight: bold;
+                    font-size: 14px;
+                    color: #555;
+                }
+
+                .input-group input {
+                    padding: 8px;
+                    font-size: 14px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                }
+
+            .submit-btn {
+                background-color: #007bff;
+                color: #fff;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                width: 100%;
+                text-align: center;
+            }
+
+                .submit-btn:hover {
+                    background-color: #0056b3;
+                }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+                .close:hover {
+                    color: black;
+                }
+
+            /* Para centrar los elementos */
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+
+            /* Estilos para tablas */
+            .clients-table, .canchas-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+                font-size: 16px;
+                text-align: center;
+            }
+
+                .clients-table th, .canchas-table th,
+                .clients-table td, .canchas-table td {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                }
+
+                .clients-table th, .canchas-table th {
+                    background-color: #f4f4f4;
+                    color: #333;
+                    font-weight: bold;
+                }
+
+                .clients-table tr:nth-child(even),
+                .canchas-table tr:nth-child(even) {
+                    background-color: #f9f9f9;
+                }
+
+                .clients-table tr:hover,
+                .canchas-table tr:hover {
+                    background-color: #f1f1f1;
+                }
+
+                .clients-table td,
+                .canchas-table td {
+                    word-wrap: break-word;
+                    max-width: 200px;
+                }
+
+            /* Botones de acción */
+            .action-buttons button {
+                padding: 8px 15px;
+                border: 1px solid #ddd;
+                background-color: #007bff;
+                color: white;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+                .action-buttons button:hover {
+                    background-color: #0056b3;
+                }
+
+            .action-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+            }
+        </style>
+
 
         <!-- Lista de Canchas -->
         <h2 class="mb-4">Lista de Canchas</h2>
@@ -54,6 +209,8 @@
                     <th>Disponible</th>
                     <th>Alquileres</th>
                     <th>Horarios Cancha</th>
+
+                    <th>ACCIONES</th>
                 </tr>
             </thead>
             <tbody>
@@ -62,7 +219,10 @@
     </div>
 
     <script>
-    const apiUrlRegistrarCancha = 'http://localhost:44313/api/Canchas/registrarCancha';
+        const apiUrlEditarCancha = 'http://localhost:44313/api/Canchas/EditarCancha/';
+        const apiUrlEliminarCancha = 'http://localhost:44313/api/Canchas/EliminarCancha/';
+
+        const apiUrlRegistrarCancha = 'http://localhost:44313/api/Canchas/registrarCancha';
         const apiUrlObtenerCanchas = 'http://localhost:44313/api/Canchas/ObtenerCanchaTodo';
 
         // Registrar nueva cancha
@@ -100,26 +260,144 @@
                 .then(response => response.json())
                 .then(data => {
                     const tbody = document.querySelector('#canchasTable tbody');
-                    tbody.innerHTML = '';
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
+                    let contador = 1; // Usar un contador para ID consecutivos
                     data.forEach(cancha => {
                         const row = `<tr>
-                            <td>${cancha.CanchaID}</td>
-                            <td>${cancha.ProveedorID}</td>
-                            <td>${cancha.Nombre}</td>
-                            <td>${cancha.Deporte}</td>
-                            <td>${cancha.PrecioPorHora}</td>
-                            <td>${cancha.Disponible ? 'Sí' : 'No'}</td>
-                            <td>${cancha.Alquileres.length}</td>
-                            <td>${cancha.HorariosCancha.length}</td>
-                        </tr>`;
+                                <td>${contador}</td>
+
+                                <td>${cancha.ProveedorID}</td>
+                                <td>${cancha.Nombre}</td>
+                                <td>${cancha.Deporte}</td>
+                                <td>${cancha.PrecioPorHora}</td>
+                                <td>${cancha.Disponible ? 'Sí' : 'No'}</td>
+                                <td>${cancha.Alquileres.length}</td>
+                                <td>${cancha.HorariosCancha.length}</td>
+                            <td>
+                                <button class="btn btn-warning" onclick="abrirModal(${cancha.CanchaID})">Editar</button>
+                                <button class="btn btn-danger" onclick="eliminarCancha(${cancha.CanchaID})">Eliminar</button>
+                            </td>
+                            </tr>`;
                         tbody.innerHTML += row;
+                        contador++;
                     });
                 })
                 .catch(error => console.error('Error:', error));
         }
 
         // Cargar las canchas cuando la página cargue
-        window.onload = cargarCanchas;</script>
+        window.onload = cargarCanchas;
+
+        function guardarCambiosCancha(id) {
+            const inputs = document.querySelectorAll(`input[data-id='${id}']`);
+            const cambios = {};
+
+            inputs.forEach(input => {
+                const field = input.dataset.field;
+                cambios[field] = input.value;
+            });
+
+            fetch(`http://localhost:44313/api/Canchas/EditarCancha/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cambios),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        cargarCanchas(); // Refresca la tabla
+                    } else {
+                        alert("Error al guardar los cambios: " + data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+
+        function editarCancha(id) {
+            // Obtener los datos de la cancha por ID
+            fetch(`http://localhost:44313/api/Canchas/ObtenerCanchaPorID/${id}`)
+                .then(response => response.json())
+                .then(cancha => {
+                    if (!cancha.success) {
+                        alert("La cancha no existe.");
+                        return;
+                    }
+                    // Llenar el formulario del modal con los datos de la cancha
+                    document.getElementById('editarNombre').value = cancha.Nombre;
+                    document.getElementById('editarDeporte').value = cancha.Deporte;
+                    document.getElementById('editarPrecioPorHora').value = cancha.PrecioPorHora;
+                    document.getElementById('editarCanchaID').value = cancha.CanchaID;
+
+                    // Mostrar el modal
+                    document.getElementById('modalEditarCancha').style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function eliminarCancha(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta cancha?')) {
+                fetch(`http://localhost:44313/api/Canchas/EliminarCancha/${id}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        cargarCanchas();
+                    })
+                    .catch(error => console.error('Error al eliminar la cancha:', error));
+            }
+        }
+
+
+        function abrirModal(id) {
+            fetch(`http://localhost:44313/api/Canchas/ObtenerCanchaPorID/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('editarCanchaID').value = data.CanchaID;
+                    document.getElementById('editarNombre').value = data.Nombre;
+                    document.getElementById('editarDeporte').value = data.Deporte;
+                    document.getElementById('editarPrecioPorHora').value = data.PrecioPorHora;
+
+                    document.getElementById('modalEditarCancha').style.display = 'block';
+                })
+                .catch(error => console.error('Error al abrir el modal:', error));
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalEditarCancha').style.display = 'none';
+        }
+
+        document.getElementById('editarCanchaForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const canchaID = document.getElementById('editarCanchaID').value;
+            const canchaData = {
+                Nombre: document.getElementById('editarNombre').value,
+                Deporte: document.getElementById('editarDeporte').value,
+                PrecioPorHora: document.getElementById('editarPrecioPorHora').value,
+            };
+
+            fetch(`http://localhost:44313/api/Canchas/EditarCancha/${canchaID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(canchaData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Cancha actualizada exitosamente');
+                    cerrarModal();
+                    cargarCanchas();
+                })
+                .catch(error => console.error('Error al actualizar la cancha:', error));
+        });
+
+    </script>
 
 </body>
 </html>

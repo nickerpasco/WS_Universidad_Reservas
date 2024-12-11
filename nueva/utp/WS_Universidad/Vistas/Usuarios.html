@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes</title>
+    <link rel="stylesheet" href="../Css/Styel2.css" />
+</head>
+<body>
+
+    <div class="form-container">
+        <h1 class="heading">Gestión de Clientes</h1>
+
+        <!-- Formulario para crear cuenta de cliente -->
+        <div class="card">
+            <div class="card-header">Crear Cliente</div>
+            <div class="card-body">
+                <form id="clienteForm">
+                    <div class="input-group">
+                        <label for="nombre" class="input-label">Nombre:</label>
+                        <input type="text" class="input-field" id="nombre" placeholder="Nombre">
+                    </div>
+                    <div class="input-group">
+                        <label for="apellido" class="input-label">Apellido:</label>
+                        <input type="text" class="input-field" id="apellido" placeholder="Apellido">
+                    </div>
+                    <div class="input-group">
+                        <label for="email" class="input-label">Email:</label>
+                        <input type="email" class="input-field" id="email" placeholder="Email">
+                    </div>
+                    <div class="input-group">
+                        <label for="contraseña" class="input-label">Contraseña:</label>
+                        <input type="password" class="input-field" id="contraseña" placeholder="Contraseña">
+                    </div>
+                    <button type="submit" class="submit-btn">Crear Cliente</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de Clientes -->
+        <h2 class="heading">Lista de Clientes</h2>
+        <table class="clients-table" id="clientesTable">
+            <thead>
+                <tr>
+                    <th>Usuario ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Perfil</th>
+                    <th>Fecha de Registro</th>
+                    <th>Alquileres</th>
+                    <th>Proveedores</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal para editar cliente -->
+    <div id="modalEditarCliente" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <h2>Editar Cliente</h2>
+            <form id="editarClienteForm">
+                <div class="input-group">
+                    <label for="editarNombre">Nombre:</label>
+                    <input type="text" id="editarNombre" class="input-field">
+                </div>
+                <div class="input-group">
+                    <label for="editarApellido">Apellido:</label>
+                    <input type="text" id="editarApellido" class="input-field">
+                </div>
+                <div class="input-group">
+                    <label for="editarEmail">Email:</label>
+                    <input type="email" id="editarEmail" class="input-field">
+                </div>
+                <input type="hidden" id="editarUsuarioID">
+                <button type="submit" class="submit-btn">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        /* Estilos básicos del modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+    </style>
+    <style>
+        .clients-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+            .clients-table th, .clients-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center; /* Centra los datos */
+            }
+
+            .clients-table th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+
+            .clients-table tr:nth-child(even) {
+                background-color: #f9f9f9; /* Alterna colores en las filas */
+            }
+
+            .clients-table tr:hover {
+                background-color: #f1f1f1; /* Color de fondo al pasar el ratón */
+            }
+
+            .clients-table td {
+                word-wrap: break-word;
+                max-width: 200px; /* Ajusta el ancho máximo de las celdas */
+            }
+
+        button {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #f2f2f2;
+            }
+
+        .clients-table td .acciones {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Espacio entre botones */
+        }
+
+        button {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #f2f2f2;
+            }
+
+    </style>
+
+
+    <script>
+        const apiUrlCrearCliente = 'http://localhost:44313/api/Clientes/crearCuenta';
+        const apiUrlObtenerClientes = 'http://localhost:44313/api/Clientes/ObtenerClientes';
+
+        // Crear nuevo cliente
+        document.getElementById('clienteForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const clienteData = {
+                Perfil: 'P',
+                Nombre: document.getElementById('nombre').value,
+                Apellido: document.getElementById('apellido').value,
+                Email: document.getElementById('email').value,
+                Contraseña: document.getElementById('contraseña').value
+            };
+
+            fetch(apiUrlCrearCliente, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(clienteData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Cliente creado exitosamente');
+                    document.getElementById('clienteForm').reset();
+                    cargarClientes();
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function cargarClientes() {
+            fetch(apiUrlObtenerClientes)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#clientesTable tbody');
+                    tbody.innerHTML = ''; // Limpia el contenido anterior
+                    let contador = 1; // Usar un contador para ID consecutivos
+                    data.forEach(cliente => {
+                        const row = `
+                        <tr>
+                            <td>${contador}</td>                      
+                            <td>${cliente.Nombre}</td>
+                            <td>${cliente.Apellido}</td>
+                            <td>${cliente.Email}</td>
+                            <td>${cliente.Perfil}</td>
+                            <td>${new Date(cliente.FechaRegistro).toLocaleDateString()}</td>
+                            <td>${cliente.Alquileres.length}</td>
+                            <td>${cliente.Proveedores.length}</td>
+                            <td>
+                                <div class="acciones">
+                                   <button onclick="abrirModal(${cliente.UsuarioID})">Editar</button>
+                                   <button onclick="eliminarCliente(${cliente.UsuarioID})">Eliminar</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                        contador++;
+                    });
+                })
+                .catch(error => console.error('Error al cargar clientes:', error));
+        }
+
+
+        function guardarCambios(id) {
+            const inputs = document.querySelectorAll(`input[data-id='${id}']`);
+            const cambios = {};
+
+            inputs.forEach(input => {
+                const field = input.dataset.field;
+                cambios[field] = input.value;
+            });
+
+            fetch(`http://localhost:44313/api/Clientes/EditarCliente/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cambios),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    cargarClientes(); // Refresca la tabla
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Editar Cliente
+        function editarCliente(id) {
+            // Obtener los datos del cliente por ID
+            fetch(`http://localhost:44313/api/Clientes/ObtenerClientePorID/${id}`)
+                .then(response => response.json())
+                .then(cliente => {
+                    // Llenar el formulario del modal con los datos del cliente
+                    document.getElementById('editarNombre').value = cliente.Nombre;
+                    document.getElementById('editarApellido').value = cliente.Apellido;
+                    document.getElementById('editarEmail').value = cliente.Email;
+                    document.getElementById('editarUsuarioID').value = cliente.UsuarioID;
+
+                    // Mostrar el modal
+                    document.getElementById('modalEditarCliente').style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function eliminarCliente(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este cliente?')) {
+                fetch(`http://localhost:44313/api/Clientes/EliminarCliente/${id}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        cargarClientes();
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+
+        function abrirModal(id) {
+            console.log(`Intentando abrir el modal para el cliente con ID: ${id}`);
+            fetch(`http://localhost:44313/api/Clientes/ObtenerClientePorID/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error en la respuesta del servidor: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(cliente => {
+                    console.log("Datos del cliente recibidos:", cliente);
+                    document.getElementById('editarNombre').value = cliente.Nombre;
+                    document.getElementById('editarApellido').value = cliente.Apellido;
+                    document.getElementById('editarEmail').value = cliente.Email;
+                    document.getElementById('editarUsuarioID').value = cliente.UsuarioID;
+
+                    // Mostrar el modal
+                    document.getElementById('modalEditarCliente').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error al abrir el modal:', error);
+                    alert("Hubo un problema al obtener los datos del cliente.");
+                });
+        }
+
+        // Cargar los clientes cuando la página cargue
+        window.onload = cargarClientes;
+
+        // Evento para el formulario de edición
+        document.getElementById('editarClienteForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const usuarioID = document.getElementById('editarUsuarioID').value;
+            const clienteData = {
+                Nombre: document.getElementById('editarNombre').value,
+                Apellido: document.getElementById('editarApellido').value,
+                Email: document.getElementById('editarEmail').value,
+            };
+
+            fetch(`http://localhost:44313/api/Clientes/EditarCliente/${usuarioID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(clienteData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Cliente actualizado exitosamente');
+                    cargarClientes(); // Refresca la tabla
+                    cerrarModal(); // Cierra el modal
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function cerrarModal() {
+            document.getElementById('modalEditarCliente').style.display = 'none';
+        }
+
+    </script>
+
+</body>
+</html>

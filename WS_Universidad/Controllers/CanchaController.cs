@@ -44,65 +44,6 @@ namespace WS_Universidad.Controllers
             return cancha;
         }
 
-
-        [HttpPut]
-        [Route("api/Canchas/ActualizarCancha")]
-        public dynamic ActualizarCancha([FromBody] Canchas dto)
-        {
-            Canchas cancha = new Canchas();
-            using (var context = new db_aaf83c_universidadtestEntities())
-            {
-
-                cancha = context.Canchas.FirstOrDefault(c => c.CanchaID == dto.CanchaID);
-
-                cancha.ProveedorID = dto.ProveedorID;
-                cancha.Nombre = dto.Nombre;
-                cancha.Deporte = dto.Deporte;
-                //cancha.FechaRegistro = dto.FechaRegistro;
-                //cancha.TiempoDisponible = dto.TiempoDisponible;
-                cancha.PrecioPorHora = dto.PrecioPorHora;
-                cancha.Disponible = true;
-
-                context.Entry(cancha).State = System.Data.Entity.EntityState.Modified;
-                context.SaveChanges();
-            }
-
-
-
-            return dto;
-
-        }
-
-
-        [HttpGet]
-        [Route("api/Canchas/ObtenerCancha")]
-        public dynamic ObtenerCancha(int IdCancha)
-        {
-            Canchas cancha = new Canchas();
-            using (var context = new db_aaf83c_universidadtestEntities())
-            {
-
-
-                var data = context.Canchas.Select(a => new
-                {
-                    a.CanchaID,
-                    a.ProveedorID,
-                    a.Nombre,
-                    a.Deporte,
-                    a.Direccion,
-                    a.PrecioPorHora,
-                    a.Disponible,
-
-                }).Where(x => x.CanchaID == IdCancha).ToList();
-
-
-                string alumnosJson = JsonConvert.SerializeObject(data, Formatting.Indented);
-                var lstData = JsonConvert.DeserializeObject<List<Canchas>>(alumnosJson);
-                return lstData;
-            }
-
-        }
-
         [HttpGet]
         [Route("api/Canchas/ObtenerCanchaTodo")]
         public dynamic ObtenerCanchaTodo()
@@ -133,23 +74,6 @@ namespace WS_Universidad.Controllers
         }
 
 
-        [HttpDelete]
-        [Route("api/Canchas/Eliminarcancha")]
-        public dynamic Eliminarcancha([FromBody] Canchas dto)
-        {
-            Canchas cancha = new Canchas();
-            using (var context = new db_aaf83c_universidadtestEntities())
-            {
-
-                cancha = context.Canchas.FirstOrDefault(c => c.CanchaID == dto.CanchaID);
-
-                context.Entry(cancha).State = System.Data.Entity.EntityState.Deleted;
-                context.SaveChanges();
-            }
-            return cancha;
-        }
-
-
         // Verificar registro en el sistema de canchas
         [HttpGet]
         [Route("api/Canchas/verificarRegistroCancha/{id}")]
@@ -162,6 +86,119 @@ namespace WS_Universidad.Controllers
             }
         }
 
+
+
+
+        [HttpGet]
+        [Route("api/Canchas/EstadisticaDeporte")]
+        public dynamic EstadisticaDeporte()
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                // Agrupa las canchas por el deporte y cuenta cuántas hay para cada uno
+                var estadisticas = context.Canchas
+                    .GroupBy(c => c.Deporte)
+                    .Select(g => new
+                    {
+                        Deporte = g.Key, // Nombre del deporte
+                        TotalCanchas = g.Count() // Número total de canchas para ese deporte
+                    })
+                    .OrderByDescending(g => g.TotalCanchas) // Ordenar de mayor a menor
+                    .ToList();
+
+                return estadisticas; // Devuelve el resultado como JSON
+            }
+        }
+
+        [HttpGet]
+        [Route("api/Canchas/IngresosPorDeporte")]
+        public dynamic IngresosPorDeporte()
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                var ingresos = context.Canchas
+                    .Where(c => c.Deporte != null && c.PrecioPorHora != null) // Ignorar registros con valores nulos
+                    .GroupBy(c => c.Deporte) // Agrupar por deporte
+                    .Select(g => new
+                    {
+                        Deporte = g.Key, // Nombre del deporte
+                        TotalIngresos = g.Sum(c => c.PrecioPorHora) // Suma de precios por deporte
+                    })
+                    .OrderByDescending(g => g.TotalIngresos) // Ordenar de mayor a menor ingreso
+                    .ToList();
+
+                return ingresos;
+            }
+        }
+
+        [HttpGet]
+        [Route("api/Canchas/ObtenerCanchaPorID/{id}")]
+        public dynamic ObtenerCanchaPorID(int id)
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                var cancha = context.Canchas
+                    .Where(c => c.CanchaID == id)
+                    .Select(c => new
+                    {
+                        c.CanchaID,
+                        c.Nombre,
+                        c.Deporte,
+                        c.PrecioPorHora,
+                        c.Disponible
+                    })
+                    .FirstOrDefault();
+
+                if (cancha == null)
+                {
+                    return new { success = false, message = "La cancha no existe." };
+                }
+
+                return cancha;
+            }
+        }
+
+        [HttpPut]
+        [Route("api/Canchas/EditarCancha/{id}")]
+        public dynamic EditarCancha(int id, [FromBody] Canchas dto)
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                var cancha = context.Canchas.FirstOrDefault(c => c.CanchaID == id);
+
+                if (cancha == null)
+                {
+                    return new { success = false, message = "La cancha no existe." };
+                }
+
+                cancha.Nombre = dto.Nombre;
+                cancha.Deporte = dto.Deporte;
+                cancha.PrecioPorHora = dto.PrecioPorHora;
+                context.SaveChanges();
+
+                return new { success = true, message = "Cancha actualizada exitosamente." };
+            }
+        }
+
+        [HttpDelete]
+        [Route("api/Canchas/EliminarCancha/{id}")]
+        public dynamic EliminarCancha(int id)
+        {
+            using (var context = new db_aaf83c_universidadtestEntities())
+            {
+                var cancha = context.Canchas.FirstOrDefault(c => c.CanchaID == id);
+
+                if (cancha == null)
+                {
+                    return new { success = false, message = "La cancha no existe." };
+                }
+
+                context.Canchas.Remove(cancha);
+                context.SaveChanges();
+
+                return new { success = true, message = "Cancha eliminada exitosamente." };
+            }
+        }
 
 
         [HttpGet]
@@ -184,5 +221,6 @@ namespace WS_Universidad.Controllers
                 return Ok(canchas);
             }
         }
+
     }
 }
